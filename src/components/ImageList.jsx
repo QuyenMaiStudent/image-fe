@@ -5,14 +5,14 @@ function ImageList() {
   const [commentInput, setCommentInput] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:9999/api/images")
+    fetch("https://image-be.onrender.com/api/images")
       .then((res) => res.json())
       .then(setImages);
   });
 
   const handleLike = (id) => {
-    fetch(`http://localhost:9999/api/images/${id}/like`, { method: "POST" });
-    fetch("http://localhost:9999/api/images")
+    fetch(`https://image-be.onrender.com/api/images/${id}/like`, { method: "POST" });
+    fetch("https://image-be.onrender.com/api/images")
       .then((res) => res.json())
       .then(setImages);
   };
@@ -21,7 +21,7 @@ function ImageList() {
     const text = commentInput[id];
     if (!text) return;
 
-    fetch(`http://localhost:9999/api/images/${id}/comment`, {
+    fetch(`https://image-be.onrender.com/api/images/${id}/comment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -29,7 +29,7 @@ function ImageList() {
 
     setCommentInput({...commentInput, [id]: ""});
 
-    fetch("http://localhost:9999/api/images")
+    fetch("https://image-be.onrender.com/api/images")
       .then((res) => res.json())
       .then(setImages);
   };
