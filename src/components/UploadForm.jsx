@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function UploadForm() {
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState("");
+  const fileInputRef = useRef();
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -27,6 +28,9 @@ function UploadForm() {
 
       if (data.success) {
         setMessage("Upload Image Success!");
+        setFile(null);
+        // Reset input value để có thể chọn lại cùng 1 file nếu muốn
+        if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         setMessage("Error: " + data.error);
       }
@@ -39,7 +43,20 @@ function UploadForm() {
     <div>
       <h1>Upload Image</h1>
       <form onSubmit={handleSubmit}>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <label htmlFor="file-upload" className="custom-file-label">
+          Chọn ảnh
+        </label>
+        <input
+          id="file-upload"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          ref={fileInputRef}
+          style={{ display: "none" }}
+        />
+        <div className="file-name">
+          {file ? file.name : "Vui lòng chọn ảnh"}
+        </div>
         <button type="submit">Upload</button>
         <div>{message}</div>
       </form>

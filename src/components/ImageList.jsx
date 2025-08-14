@@ -11,7 +11,9 @@ function ImageList() {
   });
 
   const handleLike = (id) => {
-    fetch(`https://image-be.onrender.com/api/images/${id}/like`, { method: "POST" });
+    fetch(`https://image-be.onrender.com/api/images/${id}/like`, {
+      method: "POST",
+    });
     fetch("https://image-be.onrender.com/api/images")
       .then((res) => res.json())
       .then(setImages);
@@ -27,7 +29,7 @@ function ImageList() {
       body: JSON.stringify({ text }),
     });
 
-    setCommentInput({...commentInput, [id]: ""});
+    setCommentInput({ ...commentInput, [id]: "" });
 
     fetch("https://image-be.onrender.com/api/images")
       .then((res) => res.json())
@@ -37,19 +39,35 @@ function ImageList() {
   return (
     <div>
       <h1>Gallery</h1>
-      {images.map((i) => (
-        <div key={i._id}>
-          <img src={i.secure_url} alt={i.originalname} width={200} />
-          <button onClick={() => handleLike(i._id)}>Like {i.likes}</button>
-          <ul>
-            {i.comments.map((cmt, idx) => (
+      <div className="gallery-grid">
+        {images.map((i) => (
+          <div className="gallery-item" key={i._id}>
+            <img src={i.secure_url} alt={i.originalname} width={200} />
+            <button onClick={() => handleLike(i._id)}>
+              👍 {i.likes}
+            </button>
+            <ul>
+              {i.comments.map((cmt, idx) => (
                 <li key={idx}>{cmt.text}</li>
-            ))}
-          </ul>
-          <input type="text" value={commentInput[i._id] || ""} onChange={(e) => setCommentInput({...commentInput, [i._id]: e.target.value})} placeholder="What do you think?" />
-          <button onClick={() => handleComment(i._id)}>Send</button>
-        </div>
-      ))}
+              ))}
+            </ul>
+            <div className="comment-box">
+              <input
+                type="text"
+                value={commentInput[i._id] || ""}
+                onChange={(e) =>
+                  setCommentInput({ ...commentInput, [i._id]: e.target.value })
+                }
+                placeholder="What do you think?"
+                className="comment-input"
+              />
+              <button className="comment-btn" onClick={() => handleComment(i._id)}>
+                Send
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
